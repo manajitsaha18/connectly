@@ -16,7 +16,7 @@ async function getRecommendedUsersController(req, res) {
             status: "pending"
         });
 
-        const pendingRequestSenders  = pendingRequests.map((request) => {
+        const pendingRequestSenders = pendingRequests.map((request) => {
             return request.sender;
         });
 
@@ -221,9 +221,9 @@ async function getOutgoingFriendRequestsController(req, res) {
         );
         return res.status(200).json(outgoingRequests);
 
-    }catch (err) {
+    } catch (err) {
 
-        console.error(err); 
+        console.error(err);
         return res.status(500).json({
             message: "Internal server error"
         });
@@ -277,7 +277,7 @@ async function updateProfileController(req, res) {
             });
         }
 
-        // Keep Stream user information synchronized
+
         await upsertStreamUser({
             id: updatedUser._id.toString(),
             name: updatedUser.fullName,

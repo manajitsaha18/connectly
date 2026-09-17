@@ -17,6 +17,4 @@ userRouter.get('/outgoing-friend-requests', authMiddleware.authUser, userControl
 
 
 
-
-
 module.exports = userRouter;

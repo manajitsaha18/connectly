@@ -9,21 +9,18 @@ async function RegisterUserController(req, res) {
 
     try {
 
-        // Validate required fields
         if (!fullName || !email || !password) {
             return res.status(400).json({
                 message: "All fields are required"
             });
         }
 
-        // Validate password
         if (password.length < 6) {
             return res.status(400).json({
                 message: "Password must be at least 6 characters long"
             });
         }
 
-        // Validate email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(email)) {
@@ -32,7 +29,7 @@ async function RegisterUserController(req, res) {
             });
         }
 
-        // Check existing user
+     
         const isUserAlreadyExist = await userModel.findOne({
             $or: [
                 { email }, { fullName }
@@ -45,16 +42,15 @@ async function RegisterUserController(req, res) {
             });
         }
 
-        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Generate random avatar
+      
         const idx = Math.floor(Math.random() * 100) + 1;
 
         const randomAvatar =
             `https://api.dicebear.com/10.x/adventurer/svg?seed=${idx}`;
 
-        // Create user
+       
         const newUser = await userModel.create({
             fullName,
             email,
@@ -73,14 +69,14 @@ async function RegisterUserController(req, res) {
             console.error('Error creating Stream user:', error);
         }
 
-        // Generate JWT
+        
         const token = jwt.sign(
             { id: newUser._id },
             process.env.JWT_SECRET,
             { expiresIn: '7d' }
         );
 
-        // Set cookie
+        
         res.cookie("token", token, {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
@@ -88,7 +84,7 @@ async function RegisterUserController(req, res) {
             secure: process.env.NODE_ENV === 'production'
         });
 
-        // Response
+       
         return res.status(201).json({
             message: "User registered successfully",
             user: {
